@@ -8,16 +8,21 @@ cache:
   directories:
     - node_modules
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+  - echo "fake before_install"
+  # - sudo rm /usr/local/bin/docker-compose
+  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  # - chmod +x docker-compose
+  # - sudo mv docker-compose /usr/local/bin
 script:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - make lint
-  - make test
-  - docker build -t build-s:latest --file=Dockerfile.server .
-  - docker build -t build-w:latest --file=Dockerfile.worker .
+  # - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  # - make lint
+  # - make test
+  # - docker build -t build-s:latest --file=Dockerfile.server .
+  # - docker build -t build-w:latest --file=Dockerfile.worker .
+  - wget -c https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip
+  - unzip sonar-scanner-cli-3.2.0.1227-linux.zip -d /tmp
+  - PATH=$PATH:/tmp/sonar-scanner-3.2.0.1227-linux/bin
+  - sonar-scanner -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.projectKey=$SONARQUBE_PROJECTKEY -Dsonar.host.url=$SONARQUBE_URL -Dsonar.sources=. -X
 deploy:
   provider: script
   script: bash script/deploy.sh
