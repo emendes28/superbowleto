@@ -73,6 +73,7 @@ const buildModelResponse = responseObjectBuilder(boleto =>
       'company_name',
       'company_document_number',
       'company_address',
+      'company_id',
       'bank_response_code',
       'reference_id',
       'created_at',
@@ -257,6 +258,11 @@ function create (database) {
 
     company_address: {
       type: JSON,
+    },
+    
+    company_id: {
+      type: STRING,
+      allowNull: true,
     },
 
     bank_response_code: {

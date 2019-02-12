@@ -96,6 +96,10 @@ const createSchema = {
       .allow(''),
   }),
 
+  company_id: Joi
+    .string()
+    .required(),
+
   payer_name: Joi
     .string()
     .allow(null)
