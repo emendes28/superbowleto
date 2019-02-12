@@ -28,6 +28,9 @@ test('creates a boleto (provider refused)', async (t) => {
 
   const { body, statusCode } = await create({
     body: payload,
+    headers: {
+      'x-pagarme-issuer': 'bradesco',
+    },
   })
 
   t.is(statusCode, 201)
@@ -43,13 +46,13 @@ test('creates a boleto (provider refused)', async (t) => {
     paid_amount: 0,
     amount: payload.amount,
     instructions: payload.instructions,
-    issuer: payload.issuer,
-    issuer_id: null,
+    issuer: 'bradesco',
     payer_name: payload.payer_name,
     payer_document_type: payload.payer_document_type,
     payer_document_number: payload.payer_document_number,
     company_name: payload.company_name,
     company_document_number: payload.company_document_number,
+    company_id: payload.company_id,
     queue_url: payload.queue_url,
   })
 })

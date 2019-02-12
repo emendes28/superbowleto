@@ -28,6 +28,8 @@ test('PATCH /boletos/:id', async (t) => {
 
   t.is(statusCode, 200)
   t.true(is(Object, body))
+  t.true(body.issuer_id != null)
+  t.true(typeof body.issuer_id === 'string')
 
   assert.containSubset(body, {
     paid_amount: 1234,
@@ -37,14 +39,14 @@ test('PATCH /boletos/:id', async (t) => {
     status: 'registered',
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
-    issuer: 'bradesco',
-    issuer_id: null,
+    issuer: 'development',
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     queue_url: userQueueUrl,
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
   }, 'result must have the shape of a boleto')
 })
 
@@ -65,6 +67,7 @@ test('PATCH /boletos/:id with invalid parameters', async (t) => {
       paid_amount: 1234,
       bank_response_code: '4321',
       amount: 5000,
+      company_id: 'cantpassonupdate',
     },
     headers: {
       'x-api-key': 'abc123',
@@ -80,6 +83,11 @@ test('PATCH /boletos/:id with invalid parameters', async (t) => {
         type: 'invalid_parameter',
         message: '"amount" is not allowed',
         field: 'amount',
+      },
+      {
+        type: 'invalid_parameter',
+        message: '"company_id" is not allowed',
+        field: 'company_id',
       },
     ],
   })

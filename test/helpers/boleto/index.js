@@ -12,10 +12,6 @@ export const mock = {
   expiration_date: new Date(),
   amount: 2000,
   instructions: 'Please do not accept after expiration_date',
-  issuer: 'bradesco',
-  issuer_account: '9721',
-  issuer_agency: '3381',
-  issuer_wallet: '26',
   payer_name: 'David Bowie',
   payer_document_type: 'cpf',
   payer_document_number: '98154524872',
@@ -39,12 +35,22 @@ export const mock = {
     city: 'São Paulo',
     state: 'SP',
   },
+  company_id: 'xy7sftybfjsc78',
+}
+
+export const boletoIssuerMock = {
+  issuer: 'bradesco',
+  issuer_id: 'ciz04q0oi000001ppjf0lq4pa',
+  issuer_account: '9721',
+  issuer_agency: '3381',
+  issuer_wallet: '26',
 }
 
 export const createBoleto = (data = {}) => {
   const payload = Object.assign({}, mock, data)
+  const payloadWithIssuer = Object.assign({}, payload, boletoIssuerMock)
 
-  return Boleto.create(payload)
+  return Boleto.create(payloadWithIssuer)
     .then(buildModelResponse)
 }
 

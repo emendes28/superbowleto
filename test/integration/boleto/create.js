@@ -9,7 +9,6 @@ const create = normalizeHandler(boletoHandler.create)
 test('creates a boleto with invalid data', async (t) => {
   const payload = {
     expiration_date: true,
-    issuer: 100,
     payer_document_type: 'xxx',
   }
 
@@ -33,10 +32,6 @@ test('creates a boleto with invalid data', async (t) => {
       field: 'amount',
     }, {
       type: 'invalid_parameter',
-      message: '"issuer" must be a string',
-      field: 'issuer',
-    }, {
-      type: 'invalid_parameter',
       message: '"payer_name" is required',
       field: 'payer_name',
     }, {
@@ -47,6 +42,10 @@ test('creates a boleto with invalid data', async (t) => {
       type: 'invalid_parameter',
       message: '"payer_document_number" is required',
       field: 'payer_document_number',
+    }, {
+      type: 'invalid_parameter',
+      message: '"company_id" is required',
+      field: 'company_id',
     }],
   })
 })
@@ -55,10 +54,6 @@ test('creates a non-registrable boleto', async (t) => {
   const payload = {
     expiration_date: new Date(),
     amount: 2000,
-    issuer: 'bradesco',
-    issuer_account: '9721',
-    issuer_agency: '3381',
-    issuer_wallet: '26',
     instructions: 'Please do not accept after expiration_date',
     register: false,
     queue_url: userQueueUrl,
@@ -66,6 +61,7 @@ test('creates a non-registrable boleto', async (t) => {
     token: 'live_az1sx2dc3fv4gb5gb6hn7',
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
     reference_id: 'ref_niidkanfikenafi',
   }
 
@@ -78,17 +74,18 @@ test('creates a non-registrable boleto', async (t) => {
   t.true(body.title_id != null)
   t.true(body.token != null)
   t.true(body.reference_id != null)
+  t.true(body.issuer_id != null)
   t.true(typeof body.title_id === 'number')
   t.true(typeof body.token === 'string')
   t.true(typeof body.reference_id === 'string')
+  t.true(typeof body.issuer_id === 'string')
   assert.containSubset(body, {
     status: 'issued',
     paid_amount: 0,
     amount: payload.amount,
     token: 'live_az1sx2dc3fv4gb5gb6hn7',
     instructions: payload.instructions,
-    issuer: payload.issuer,
-    issuer_id: null,
+    issuer: 'development',
     title_id: 123456,
     payer_name: null,
     payer_document_type: null,
@@ -96,5 +93,6 @@ test('creates a non-registrable boleto', async (t) => {
     queue_url: payload.queue_url,
     company_name: payload.company_name,
     company_document_number: payload.company_document_number,
+    company_id: 'xy7sftybfjsc78',
   })
 })

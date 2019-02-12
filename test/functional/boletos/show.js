@@ -24,6 +24,8 @@ test('GET /boletos/:id with valid id', async (t) => {
 
   t.is(statusCode, 200)
   t.true(is(Object, body))
+  t.true(body.issuer_id != null)
+  t.true(typeof body.issuer_id === 'string')
 
   assert.containSubset(body, {
     object: 'boleto',
@@ -32,14 +34,14 @@ test('GET /boletos/:id with valid id', async (t) => {
     paid_amount: 0,
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
-    issuer: 'bradesco',
-    issuer_id: null,
+    issuer: 'development',
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     queue_url: userQueueUrl,
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
   }, 'result must have the shape of a boleto')
 })
 

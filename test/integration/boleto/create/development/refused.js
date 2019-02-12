@@ -10,7 +10,6 @@ test('creates a boleto (provider refused)', async (t) => {
   const payload = mock
 
   payload.amount = 5000004
-  payload.issuer = 'development'
 
   const { body, statusCode } = await create({
     body: payload,
@@ -20,16 +19,17 @@ test('creates a boleto (provider refused)', async (t) => {
   t.is(body.object, 'boleto')
 
   t.true(body.title_id != null)
+  t.true(body.issuer_id != null)
   t.true(body.barcode != null)
   t.true(typeof body.title_id === 'number')
+  t.true(typeof body.issuer_id === 'string')
 
   assert.containSubset(body, {
     status: 'refused',
     paid_amount: 0,
     amount: payload.amount,
     instructions: payload.instructions,
-    issuer: payload.issuer,
-    issuer_id: null,
+    issuer: 'development',
     payer_name: payload.payer_name,
     payer_document_type: payload.payer_document_type,
     payer_document_number: payload.payer_document_number,

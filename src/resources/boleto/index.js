@@ -2,6 +2,8 @@ const Promise = require('bluebird')
 const {
   both,
   complement,
+  defaultTo,
+  path,
   propEq,
 } = require('ramda')
 const { buildSuccessResponse, buildFailureResponse } = require('../../lib/http/response')
@@ -18,6 +20,7 @@ const { makeFromLogger } = require('../../lib/logger')
 const { BoletosToRegisterQueue } = require('./queues')
 const { defaultCuidValue } = require('../../lib/database/schema')
 const { buildModelResponse } = require('./model')
+const { findIssuer } = require('../../providers')
 
 const makeLogger = makeFromLogger('boleto/index')
 
@@ -44,6 +47,8 @@ const create = (req, res) => {
   const logger = makeLogger({ operation: 'handle_boleto_request' }, { id: requestId })
 
   const shouldRegister = () => req.body.register !== 'false' && req.body.register !== false
+
+  const issuerNameHeader = defaultTo(null, path(['headers', 'x-pagarme-issuer'], req))
 
   const registerBoletoConditionally = (boleto) => {
     if (shouldRegister()) {
@@ -96,6 +101,7 @@ const create = (req, res) => {
 
   return Promise.resolve(req.body)
     .then(parse(createSchema))
+    .then(parsedBoleto => findIssuer(parsedBoleto, issuerNameHeader))
     .then(service.create)
     .tap(registerBoletoConditionally)
     .tap(pushBoletoToQueueConditionally)

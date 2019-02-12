@@ -22,18 +22,21 @@ test(`Update boleto's paid_amount and bank_response_code`, async (t) => {
 
   t.is(statusCode, 200)
   t.is(body.object, 'boleto')
+  t.true(body.issuer_id != null)
+  t.true(typeof body.issuer_id === 'string')
+
   assert.containSubset(body, {
     status: 'issued',
     paid_amount: 300,
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
     issuer: 'bradesco',
-    issuer_id: null,
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
     bank_response_code: 'brc_973927',
   }, 'result must have the shape of a boleto')
 })
@@ -53,18 +56,21 @@ test(`Update boleto's paid_amount`, async (t) => {
 
   t.is(statusCode, 200)
   t.is(body.object, 'boleto')
+  t.true(body.issuer_id != null)
+  t.true(typeof body.issuer_id === 'string')
+
   assert.containSubset(body, {
     status: 'issued',
     paid_amount: 300,
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
     issuer: 'bradesco',
-    issuer_id: null,
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
     bank_response_code: null,
   }, 'result must have the shape of a boleto')
 })

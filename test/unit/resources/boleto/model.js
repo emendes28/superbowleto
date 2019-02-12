@@ -42,6 +42,7 @@ test('buildResponse', async (t) => {
       city: 'São Paulo',
       state: 'SP',
     },
+    company_id: 'xy7sftybfjsc78',
     created_at: now,
     updated_at: now,
     secret_field: 'this is secret',
@@ -85,6 +86,7 @@ test('buildResponse', async (t) => {
       city: 'São Paulo',
       state: 'SP',
     },
+    company_id: 'xy7sftybfjsc78',
     created_at: now,
     updated_at: now,
   }, 'should be a boleto object')

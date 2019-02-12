@@ -1,6 +1,6 @@
 import test from 'ava'
 import moment from 'moment'
-import { createBoleto } from '../../../helpers/boleto'
+import boletoStub from '../../../helpers/stubs/boleto'
 import { buildHeaders, buildPayload, translateResponseCode } from '../../../../src/providers/bradesco'
 
 test('buildHeaders', (t) => {
@@ -12,17 +12,16 @@ test('buildHeaders', (t) => {
 })
 
 test('buildPayload', async (t) => {
-  const boleto = await createBoleto()
-  const payload = buildPayload(boleto)
+  const payload = buildPayload(boletoStub)
 
   t.deepEqual(payload, {
     merchant_id: '100005254',
     boleto: {
       carteira: '26',
-      nosso_numero: boleto.title_id,
-      numero_documento: boleto.title_id,
+      nosso_numero: boletoStub.title_id,
+      numero_documento: boletoStub.title_id,
       data_emissao: moment().tz('America/Sao_Paulo').format('YYYY-MM-DD'),
-      data_vencimento: moment(boleto.expiration_date).tz('America/Sao_Paulo').format('YYYY-MM-DD'),
+      data_vencimento: moment(boletoStub.expiration_date).tz('America/Sao_Paulo').format('YYYY-MM-DD'),
       valor_titulo: 2000,
       pagador: {
         nome: 'David Bowie',

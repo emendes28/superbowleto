@@ -28,22 +28,6 @@ const createSchema = {
     .allow('')
     .allow(null),
 
-  issuer: Joi
-    .string()
-    .required(),
-
-  issuer_account: Joi
-    .string()
-    .required(),
-
-  issuer_agency: Joi
-    .string()
-    .required(),
-
-  issuer_wallet: Joi
-    .string()
-    .required(),
-
   reference_id: Joi
     .string()
     .allow(null),

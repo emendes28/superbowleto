@@ -21,19 +21,22 @@ test('shows all boletos with default pagination', async (t) => {
   t.is(statusCode, 200)
   t.is(body.length, 10, 'should have the default 10 items on the result')
   t.is(item.object, 'boleto')
+  t.true(item.issuer_id != null)
+  t.true(typeof item.issuer_id === 'string')
+
   assert.containSubset(item, {
     status: 'issued',
     paid_amount: 0,
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
     issuer: 'bradesco',
-    issuer_id: null,
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     queue_url: userQueueUrl,
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
   }, 'result must have the shape of a boleto')
 })
 
@@ -49,19 +52,22 @@ test('shows all boletos with custom pagination', async (t) => {
   t.is(statusCode, 200)
   t.is(body.length, 2, 'should have 2 items on the result')
   t.is(item.object, 'boleto')
+  t.true(item.issuer_id != null)
+  t.true(typeof item.issuer_id === 'string')
+
   assert.containSubset(item, {
     status: 'issued',
     paid_amount: 0,
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
     issuer: 'bradesco',
-    issuer_id: null,
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
     queue_url: userQueueUrl,
     company_name: 'Some Company',
     company_document_number: '98154524872',
+    company_id: 'xy7sftybfjsc78',
   }, 'result must have the shape of a boleto')
 })
 
@@ -81,6 +87,9 @@ test('shows a boleto with a specific token', async (t) => {
   t.is(statusCode, 200)
   t.is(body.length, 1, 'should have 1 item on the result')
   t.is(item.object, 'boleto')
+  t.true(item.issuer_id != null)
+  t.true(typeof item.issuer_id === 'string')
+
   assert.containSubset(item, {
     status: 'issued',
     paid_amount: 0,
@@ -88,7 +97,6 @@ test('shows a boleto with a specific token', async (t) => {
     amount: 2000,
     instructions: 'Please do not accept after expiration_date',
     issuer: 'bradesco',
-    issuer_id: null,
     payer_name: 'David Bowie',
     payer_document_type: 'cpf',
     payer_document_number: '98154524872',
@@ -112,5 +120,6 @@ test('shows a boleto with a specific token', async (t) => {
       city: 'São Paulo',
       state: 'SP',
     },
+    company_id: 'xy7sftybfjsc78',
   }, 'result must have the shape of a boleto')
 })

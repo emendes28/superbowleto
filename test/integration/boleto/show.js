@@ -18,19 +18,22 @@ test('shows an existing boleto', async (t) => {
   t.is(statusCode, 200)
   t.is(body.id, boleto.id)
   t.is(body.object, 'boleto')
+  t.true(body.issuer_id != null)
+  t.true(typeof body.issuer_id === 'string')
+
   assert.containSubset(body, {
     status: 'issued',
     paid_amount: 0,
     amount: mock.amount,
     instructions: mock.instructions,
-    issuer: mock.issuer,
-    issuer_id: null,
+    issuer: 'bradesco',
     payer_name: mock.payer_name,
     payer_document_type: mock.payer_document_type,
     payer_document_number: mock.payer_document_number,
     queue_url: mock.queue_url,
     company_name: mock.company_name,
     company_document_number: mock.company_document_number,
+    company_id: mock.company_id,
   })
 })
 

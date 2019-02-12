@@ -17,24 +17,25 @@ test('POST /boletos', async (t) => {
   t.is(statusCode, 201)
   t.is(body.object, 'boleto')
 
-  t.true(body.title_id != null)
   t.true(body.barcode != null)
-  t.true(body.issuer_response_code != null)
+  t.true(body.issuer_id != null)
+  t.true(body.title_id != null)
+
+  t.true(typeof body.issuer_id === 'string')
   t.true(typeof body.title_id === 'number')
-  t.true(typeof body.issuer_response_code === 'string')
 
   assert.containSubset(body, {
     status: 'registered',
     paid_amount: 0,
     amount: mock.amount,
     instructions: mock.instructions,
-    issuer: mock.issuer,
-    issuer_id: null,
+    issuer: 'development',
     payer_name: mock.payer_name,
     payer_document_type: mock.payer_document_type,
     payer_document_number: mock.payer_document_number,
     company_name: mock.company_name,
     company_document_number: mock.company_document_number,
+    company_id: mock.company_id,
     queue_url: mock.queue_url,
   })
 })
@@ -63,13 +64,13 @@ test('POST /boletos with invalid parameters', async (t) => {
     errors: [
       {
         type: 'invalid_parameter',
-        message: '"issuer" must be a string',
-        field: 'issuer',
+        message: '"payer_name" must be a string',
+        field: 'payer_name',
       },
       {
         type: 'invalid_parameter',
-        message: '"payer_name" must be a string',
-        field: 'payer_name',
+        message: '"issuer" is not allowed',
+        field: 'issuer',
       },
       {
         type: 'invalid_parameter',
