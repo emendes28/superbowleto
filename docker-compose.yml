@@ -51,6 +51,55 @@ services:
       - yopa
       - superbowleto-web
 
+  test-functional:
+    build: .
+    entrypoint: npm run test-functional
+    environment:
+      - API_ENV=test
+    volumes:
+      - .:/superbowleto
+      - /superbowleto/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      yopa:
+        condition: service_healthy
+      superbowleto-web:
+        condition: service_started
+    links:
+      - postgres
+      - yopa
+      - superbowleto-web
+
+  test-integration:
+    build: .
+    entrypoint: npm run test-integration
+    environment:
+      - API_ENV=test
+    volumes:
+      - .:/superbowleto
+      - /superbowleto/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      yopa:
+        condition: service_healthy
+      superbowleto-web:
+        condition: service_started
+    links:
+      - postgres
+      - yopa
+      - superbowleto-web
+
+  test-unit:
+    build: .
+    entrypoint: npm run test-unit
+    environment:
+      - API_ENV=test
+    volumes:
+      - .:/superbowleto
+      - /superbowleto/node_modules
+
   lint:
     build: .
     entrypoint: npm run lint

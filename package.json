@@ -7,7 +7,6 @@
   "scripts": {
     "lint": "eslint 'test/**/*.js' 'src/**/*.js'",
     "test": "nyc ava --verbose --serial 'test/**/*.js'",
-    "test-e2e": "ava --verbose --serial 'test/e2e/**/*.js'",
     "test-functional": "ava --verbose --serial 'test/functional/**/*.js'",
     "test-integration": "ava --verbose 'test/integration/**/*.js'",
     "test-unit": "ava --verbose 'test/unit/**/*.js'"
