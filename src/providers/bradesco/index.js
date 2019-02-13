@@ -7,7 +7,9 @@ const {
   assoc,
   compose,
   defaultTo,
+  multiply,
   path,
+  pipe,
   prop,
 } = require('ramda')
 const { format } = require('./formatter')
@@ -31,6 +33,11 @@ const buildHeaders = () => {
     Authorization: `Basic ${authorization}`,
   }
 }
+
+const normalizePercentage = propertyPath => pipe(
+  path(propertyPath),
+  multiply(10000)
+)
 
 const buildPayload = (boleto) => {
   const spec = applySpec({
@@ -57,6 +64,26 @@ const buildPayload = (boleto) => {
         },
       },
       informacoes_opcionais: {
+        perc_juros: normalizePercentage(['interest', 'percentage']),
+        valor_juros: path(['interest', 'amount']),
+        qtde_dias_juros: path(['interest', 'days']),
+
+        perc_multa_atraso: normalizePercentage(['fine', 'percentage']),
+        valor_multa_atraso: path(['fine', 'amount']),
+        qtde_dias_multa_atraso: path(['fine', 'days']),
+
+        perc_desconto_1: normalizePercentage(['discount', '0', 'percentage']),
+        valor_desconto_1: path(['discount', '0', 'amount']),
+        data_limite_desconto_1: path(['discount', '0', 'limit_date']),
+
+        perc_desconto_2: normalizePercentage(['discount', '1', 'percentage']),
+        valor_desconto_2: path(['discount', '1', 'amount']),
+        data_limite_desconto_2: path(['discount', '1', 'limit_date']),
+
+        perc_desconto_3: normalizePercentage(['discount', '2', 'percentage']),
+        valor_desconto_3: path(['discount', '2', 'amount']),
+        data_limite_desconto_3: path(['discount', '2', 'limit_date']),
+
         sacador_avalista: {
           nome: prop('company_name'),
           documento: prop('company_document_number'),
